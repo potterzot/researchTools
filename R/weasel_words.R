@@ -4,22 +4,35 @@
 #' @importFrom stringr str_count str_to_lower
 #' @importFrom readr write_csv
 #' @param txt text to evaluate.
-#' @param weasels list of words or phrases to look for.
+#' @param weasel_words list of words or phrases to look for.
+#' @param outfile the name of a file to save the results to.
 #' @return a list of weasel phrases found and their frequency.
-find_weasels <- function(txt, weasels, outfile = FALSE) {
+find_weasels <- function(txt, weasels, outfile = NULL) {
   if(file.exists(txt)) { #If a file, open it and read the text
-    txt <- readLines(txt)
+    txt <- paste(readLines(txt), collapse="")
   }
 
+  if(missing(weasels)) weasels <- weasel_words #use package default if non provided
+
   txt <- str_to_lower(txt) #lower all case for matching
-  res <- sapply(weasels, function(x) { str_count(txt, x) })
+  res <- sapply(weasel_words, function(x) { str_count(txt, x) })
   res2 <- res[res != 0] #we only want words that were found
 
-  if(outfile) {
-    dat <- data.frame(weasels = names(res2), count = res2, stringsAsFactors = FALSE)
+  if(is.null(outfile) == FALSE) {
+    dat <- data.frame(weasel_words = names(res2), count = res2, stringsAsFactors = FALSE)
     write_csv(dat, outfile)
   }
 
   return(res2)
 }
 
+#' The default weasel words.
+#'
+#' Provides a way of viewing the internal package list of weasel words.
+#'
+#' @export
+#' @return the list of weasel words internal to the package.
+#'
+weasels <- function() {
+  weasel_words
+}

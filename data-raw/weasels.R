@@ -32,4 +32,4 @@ weasel_words <- c(
   "via"
   )
 
-devtools::use_data(weasel_words, overwrite = TRUE)
+devtools::use_data(weasel_words, overwrite = TRUE, internal = TRUE)

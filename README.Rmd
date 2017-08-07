@@ -26,6 +26,14 @@ Nicholas Potter (potterzot@gmail.com)
 
 This is the github repository for the `R` package `researchTools`. The tools include:
 
+### find_weasels
+`find_weasels` returns a count of words we want to avoid in writing, so called "weasel" words as termed by [Matt Might](http://matt.might.net/articles/shell-scripts-for-passive-voice-weasel-words-duplicates/). Additional words to avoid have been added, including those suggested by Dierdre McCloskey in [Economical Writing](https://www.waveland.com/browse.php?t=154&r=d%7C85&pgtitle=Economical+Writing%3A+Second+Edition+by+Deirdre+N.+McCloskey). The idea is to remove them from writing as much as possible. An example use (the ones I use in my makefiles) is:
+
+    researchTools::find_weasels("draft.Rmd", outfile = "weasels.csv")
+
+which will create a file "weasels.csv" that contains a count of all weasel words in the document "draft.Rmd".
+
+
 ## Requirements
 
 ## How to use this repository
@@ -34,7 +42,7 @@ This is the github repository for the `R` package `researchTools`. The tools inc
 
 Code: [MIT License](https://opensource.org/licenses/MIT), 2017, Nicholas A Potter
 
-Data:
+Data: 
 
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(

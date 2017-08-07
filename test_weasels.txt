@@ -1,0 +1,6 @@
+weasel_words,count
+are a number,1
+clearly,1
+excellent,1
+vast,2
+very,1
