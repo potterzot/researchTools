@@ -1,15 +1,19 @@
 Package: researchTools
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Functions to Aid in Research and Writing
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
+Author: Nicholas A Potter
+Maintainer: Nicholas A Potter <potterzot@gmail.com>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Suggests: testthat,
-    knitr,
-    rmarkdown
 VignetteBuilder: knitr
+RoxygenNote: 5.0.1
+Suggests:
+  testthat,
+  knitr,
+  markdown
+Imports:
+  stringr

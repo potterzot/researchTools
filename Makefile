@@ -1,23 +1,18 @@
-all: clean_all data_all doc test paper readme
+all: clean readme data doc test install
 
 #CLEANING
 #remove any intermediate files
 clean:
-	rm -f README.md
-
-#remove all intermediate files, including data
-clean_data:
-	rm -f data/raw/* data/proc/* data/final/*
-
-clean_all: clean clean_data
-
+	rm -f README.md data/* man/*
 
 #DATA
 #generate new data without downloading new data
 data:
+	Rscript 'data-raw/weasels.R'	
 
 #TESTS
-test:
+test: tests/testthat.R tests/testthat
+	R -e 'devtools::test()'
 
 #DOCUMENTATION
 #document the package
@@ -31,7 +26,9 @@ readme: README.Rmd
 
 #R PACKAGE
 #build and install the package
-install: doc
-	R CMD check .
-	R CMD INSTALL .
+install: 
+	R -e 'devtools::install()'
+#	R CMD build .
+#	R CMD check .
+#	R CMD INSTALL .
 
