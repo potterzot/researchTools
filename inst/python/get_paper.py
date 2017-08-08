@@ -128,11 +128,11 @@ def make_year(res):
   """
   return str(res['issued']['date-parts'][0][0])
 
-
 def make_author_list(res):
   """Takes a list of author names and returns a cleaned list of author names."""
   try:
-    r = [" ".join([clean_txt(x['given']), clean_txt(x['family'])]) for x in res['author']]
+    #r = [" ".join([clean_txt(x['given']), clean_txt(x['family'])]) for x in res['author']]
+    r = [", ".join([clean_txt(x['family']), clean_txt(x['given'])]) for x in res['author']]
   except KeyError as e:
     print("No 'author' key, using 'Unknown Author'. You should edit the markdown file to change the name and citationkey.")
     r = ["Unknown Authors"]
@@ -145,16 +145,18 @@ def make_citation(meta):
 
 def make_citation_authors(res):
   """Takes a DOI json string and returns a string of authors in Chicago style."""
-  first_author = res['author'][0]['family'] + ", " + res['author'][0]['given']
-  last_author = res['author'][-1]['given'] + " " + res['author'][-1]['family']
-  middle_authors = ", ".join(" ".join([x['given'], x['family']]) for x in res['author'][1:-1])
-
-  #assemble authors
-  author_string = first_author
-  author_string = author_string + ", " + middle_authors if middle_authors != '' else author_string
-  author_string = author_string + ", and " + last_author if len(res['author']) > 1 else author_string
-
-  author_string = author_string + "." if author_string[-1] != "." else author_string
+  if "author" in res.keys():
+    first_author = res['author'][0]['family'] + ", " + res['author'][0]['given']
+    last_author = res['author'][-1]['given'] + " " + res['author'][-1]['family']
+    middle_authors = ", ".join(" ".join([x['given'], x['family']]) for x in res['author'][1:-1])
+    #assemble authors
+    author_string = first_author
+    author_string = author_string + ", " + middle_authors if middle_authors != '' else author_string
+    author_string = author_string + ", and " + last_author if len(res['author']) > 1 else author_string
+    
+    author_string = author_string + "." if author_string[-1] != "." else author_string
+  else:
+    author_string = "Unknown Authors"
 
   return clean_txt(author_string)
   
@@ -282,7 +284,7 @@ def main(argv):
       with open(bibtex_filename, "a") as f:
         s = ",".join([
           "\n@article{" + meta['citationkey'],
-          "\nauthor = {" + " and ".join(", ".join([x['family'], x['given']]) for x in res['author']) + "}",
+          "\nauthor = {" + " and ".join(meta['authors']) + "}",
           "\ndoi = {" + meta['doi'] + "}",
           "\nissn = {" + meta['issn'] + "}",
           "\njournal = {" + meta['container'] + "}",
