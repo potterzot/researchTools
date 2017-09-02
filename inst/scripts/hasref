@@ -1,0 +1,8 @@
+#!/usr/bin/bash
+
+#Check a bibfile for a reference
+BIBFILE="${HOME}/reason/research/bibliography/library.bib"
+grep -E "@" $BIBFILE | grep --color -E ${1} 
+
+
+
