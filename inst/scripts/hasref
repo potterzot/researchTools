@@ -2,7 +2,7 @@
 
 #Check a bibfile for a reference
 BIBFILE="${HOME}/reason/research/bibliography/library.bib"
-grep -E "@" $BIBFILE | grep --color -E ${1} 
+grep "@" $BIBFILE | grep --color -E "${1}|'$'" 
 
 
 
