@@ -251,10 +251,8 @@ def main(argv):
     letters = list(string.ascii_lowercase)
     with open(bibtex_filename, 'r') as fobj:
         text = fobj.read().strip()
-        print(text[1:10])
         tmp_key = meta['citationkey']
         for letter in letters:
-            print(tmp_key)
             if tmp_key in text:
                 tmp_key = meta['citationkey'] + letter
             else:
