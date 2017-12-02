@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 USAGE: init_paper 
@@ -246,24 +246,20 @@ def main(argv):
     #extract
     meta = extract_metadata(res)
     
-    #get directories and check citation 
-    subject_dir = re.sub(r'\([^)]*\)', '', meta['subjects'][0]).strip().lower().replace(" ", "_").replace(",","")
-    md_dir = "/".join([HOME_DIR, REPO_DIR, MD_DIR, subject_dir])
-    os.mkdir(md_dir) if os.path.isdir(md_dir) == False else None
-
-    #First check that the file doesn't exist, and if it does, increment the citationkey
-    citation_files = list(chain.from_iterable([x[2] for x in os.walk("/".join([HOME_DIR, REPO_DIR]))]))
+    #check that reference exists
+    citation_found = True
     letters = list(string.ascii_lowercase)
-    citation_found = False
-    j = 0
-    while citation_found is False:
-      tmp_citationkey = meta['citationkey'] + letters[j]
-      if tmp_citationkey +  ".md" in citation_files:
-        meta['citationkey'] = meta['citationkey'] + letters[j]
-      else:
-        citation_found = True
-      j += 1
-    filename = "/".join([md_dir, meta['citationkey'] + ".md"])
+    with open(bibtex_filename, 'r') as fobj:
+        text = fobj.read().strip()
+        print(text[1:10])
+        tmp_key = meta['citationkey']
+        for letter in letters:
+            print(tmp_key)
+            if tmp_key in text:
+                tmp_key = meta['citationkey'] + letter
+            else:
+                meta['citationkey'] = tmp_key
+                break
 
     #Then write if not testing
     if testing:
@@ -302,6 +298,10 @@ def main(argv):
       
       # create the markdown notes file
       if markdown:
+        subject_dir = re.sub(r'\([^)]*\)', '', meta['subjects'][0]).strip().lower().replace(" ", "_").replace(",","")
+        md_dir = "/".join([HOME_DIR, REPO_DIR, MD_DIR, subject_dir])
+        os.mkdir(md_dir) if os.path.isdir(md_dir) == False else None
+        filename = "/".join([md_dir, meta['citationkey'] + ".md"])
         with open(filename, "w") as f:
           f.write("---\nlayout: mathpost\n")
           for k,v in meta.items():
