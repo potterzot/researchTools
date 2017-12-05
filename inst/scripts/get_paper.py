@@ -102,7 +102,7 @@ def extract_metadata(res):
   d['authors'] = make_author_list(res)
   d['citation-authors'] = make_citation_authors(res)
   d['citation'] = make_citation(res)
-  d['source-title'] = res['title'].strip(" ")
+  d['source-title'] = res['title'].strip(" ").capitalize()
   d['title'] = "Notes on '" + d['source-title'] + "', by " + ", ".join(d['authors'][0:-1])
   if len(d['authors']) > 1:
     d['title'] = d['title'] + ", and " + d['authors'][-1] 
@@ -131,7 +131,6 @@ def make_year(res):
 def make_author_list(res):
   """Takes a list of author names and returns a cleaned list of author names."""
   try:
-    #r = [" ".join([clean_txt(x['given']), clean_txt(x['family'])]) for x in res['author']]
     r = [", ".join([clean_txt(x['family']), clean_txt(x['given'])]) for x in res['author']]
   except KeyError as e:
     print("No 'author' key, using 'Unknown Author'. You should edit the markdown file to change the name and citationkey.")
