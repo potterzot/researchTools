@@ -168,7 +168,7 @@ def make_citation_key(res):
     last_names = [x['family'] for x in res['author']]
   except KeyError as e:
     last_names = ["Unknown"]
-  if len(last_names) > 3:
+  if len(last_names) >= 3:
     key = last_names[0] + "ETAL" + year
   else:
     key = "".join(last_names) + year
