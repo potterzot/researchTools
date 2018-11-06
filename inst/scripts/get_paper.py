@@ -25,14 +25,12 @@ from metapub import CrossRef as cr
 #Depending on operating system
 if sys.platform == "linux" or sys.platform == "linux2":
   HOME_DIR = "/www/potterzot.github.io"
-  BIB_DIR = "/home/potterzot/reason/research/bibliography"
 elif sys.platform == "darwin":
   # OS X
   pass
 elif sys.platform == "win32":
   # Windows...
   HOME_DIR = "C:/Users/Nicholas Potter/code/potterzot.github.io"
-  BIB_DIR = "C:/Users/Nicholas Potter/research/bibliography"
 
 #Universal
 REPO_DIR = "_notes"
