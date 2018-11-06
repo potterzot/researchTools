@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-USAGE: init_paper 
+USAGE: get_paper.py doi 
 Creates a new paper note with full metadata and downloads the pdf:
 * Uses the Crossref API to fetch paper metadata and abstract
 * Automatically download the pdf and saves it in standard naming convention
@@ -46,7 +46,7 @@ HELP_TXT = '\n' + USAGE_TXT + 'OPTIONS:\n\
   -m, --markdown:   create a markdown file to add notes to. \n\
   -b, --biblio:     specify the bibtex file to add an entry to. \n\
   \n\
-  Example: ./get_paper.py -m -b temp.bib 10.1257/jep.24.2.31\n\
+Example: ./get_paper.py -m -b temp.bib 10.1257/jep.24.2.31\n\
 '
 
 ##################
@@ -210,6 +210,9 @@ def main(argv):
   """
   Takes a DOI and creates a markdown file with the article metadata, as well as attempting to download the pdf.
   """
+  if len(argv) == 0 or argv == None:
+      print(HELP_TXT)
+      sys.exit(2)
   try:
     opts, args = getopt.getopt(argv,"dhmb:",["debug", "help", "markdown", "biblio="])
   except getopt.GetoptError:
