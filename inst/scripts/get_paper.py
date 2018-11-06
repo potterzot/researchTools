@@ -185,7 +185,6 @@ def make_container(res):
     "PLoS Comput Biol": "PLoS Computational Biology",
     "PLoS Med": "PLoS Medicine"}
 
-  print(res['container-title'])
   s = res['container-title'] if "container-title" in res.keys() else "Unknown"
   if s is None: s = "Unknown"
   if len(s) == 0: s = ""
@@ -220,7 +219,7 @@ def main(argv):
   testing = False
   markdown = False
   bibtex_filename = "library.bib"
-  
+   
   for opt, arg in opts:
     if opt in ('-h', '--help'):
       print(HELP_TXT)
@@ -230,7 +229,6 @@ def main(argv):
       print("Fetching of DOI and printing metadata, but not adding to bibtex or creating markdown.")
     elif opt in ('-b', '--biblio'):
       bibtex_filename = arg
-      print(arg)
     elif opt in ('-m', '--markdown'):
       markdown = True
       print("Writing entry to bibtex file but not creating a markdown file.")
@@ -246,18 +244,21 @@ def main(argv):
     #extract
     meta = extract_metadata(res)
     
-    #check that reference exists
+    #check if reference exists
     citation_found = True
     letters = list(string.ascii_lowercase)
-    with open(bibtex_filename, 'r') as fobj:
-        text = fobj.read().strip()
-        tmp_key = meta['citationkey']
-        for letter in letters:
-            if tmp_key in text:
-                tmp_key = meta['citationkey'] + letter
-            else:
-                meta['citationkey'] = tmp_key
+    try:
+        with open(bibtex_filename, 'r') as fobj:
+            text = fobj.read().strip()
+            tmp_key = meta['citationkey']
+            for letter in letters:
+                if tmp_key in text:
+                    tmp_key = meta['citationkey'] + letter
+                else:
+                    meta['citationkey'] = tmp_key
                 break
+    except FileNotFoundError:
+        pass
 
     #Then write if not testing
     if testing:
@@ -274,8 +275,11 @@ def main(argv):
         else:
           print(k + ': "' + str(v) + '"\n')
     else:
+      if not os.path.isfile(bibtex_filename):
+          print("Bibtex file {} does not exist, creating it.".format(bibtex_filename))
+
       #Add the metadata to the bibtex reference
-      with open(bibtex_filename, "a") as f:
+      with open(bibtex_filename, "a+") as f:
         s = ",".join([
           "\n@article{" + meta['citationkey'],
           "\nauthor = {" + " and ".join(meta['authors']) + "}",
@@ -292,7 +296,7 @@ def main(argv):
         ])
         f.write(s)
       
-      print("reference {} added to {}!\n".format(meta['citationkey'], bibtex_filename))
+      print("reference {} from {} added to {}!\n".format(meta['citationkey'], meta['container'],  bibtex_filename))
       
       # create the markdown notes file
       if markdown:
