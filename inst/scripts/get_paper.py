@@ -17,7 +17,7 @@ import json
 from datetime import date
 from collections import OrderedDict
 from itertools import chain #for flattening a list
-from metapub import CrossRef as cr
+#from metapub import PubMedFetcher as fetcher
 
 #######################
 # Global Variables
@@ -129,7 +129,7 @@ def make_year(res):
 def make_author_list(res):
   """Takes a list of author names and returns a cleaned list of author names."""
   try:
-    r = [", ".join([clean_txt(x['family']), clean_txt(x['given'])]) for x in res['author']]
+    r = [", ".join([clean_txt(x['family']).capitalize(), clean_txt(x['given']).capitalize()]) for x in res['author']]
   except KeyError as e:
     print("No 'author' key, using 'Unknown Author'. You should edit the markdown file to change the name and citationkey.")
     r = ["Unknown Authors"]
@@ -155,7 +155,7 @@ def make_citation_authors(res):
   else:
     author_string = "Unknown Authors"
 
-  return clean_txt(author_string)
+  return clean_txt(author_string.capitalize())
   
 
 def make_citation_key(res):
@@ -167,7 +167,7 @@ def make_citation_key(res):
   except KeyError as e:
     last_names = ["Unknown"]
   if len(last_names) >= 3:
-    key = last_names[0] + "ETAL" + year
+    key = last_names[0].capitalize() + "ETAL" + year
   else:
     key = "".join(last_names) + year
 
